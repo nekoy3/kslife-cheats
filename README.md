@@ -1,7 +1,7 @@
 # kslife-cheats
 
 # 概要  
-K's lifeにseleniumでアクセスして、自動出席登録もしくはアンケート回答をDiscordのbot経由で実行する。  
+K's lifeにseleniumでアクセスして、自動出席登録もしくはアンケート回答をdiscord.pyを使ったDiscordのbot経由で実行する。  
   
 # メモ(個人用)  
 コマンドプロンプトで ```python -m venv venv``` で仮想環境を構築し、pipでパッケージをプロジェクト別に導入する事が出来る。(https://qiita.com/fiftystorm36/items/b2fd47cf32c7694adc2e)  
