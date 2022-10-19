@@ -24,9 +24,9 @@ def main():
     try:
         config.read('config.ini', encoding="utf-8_sig")
 
-        configClass = ConfigClass()
-        configClass.mail = str(config['login']['mail'])
-        configClass.password = str(config['login']['password'])
+        configs = ConfigClass()
+        configs.mail = str(config['login']['mail'])
+        configs.password = str(config['login']['password'])
 
     except Exception as e:
         print("config.iniが存在しないか、設定が間違っています。\n" + str(e))
@@ -35,7 +35,7 @@ def main():
             create_config()
         exit()
     else:
-        return configClass
+        return configs
 
 if __name__ == '__main__':
     main()
