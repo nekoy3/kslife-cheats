@@ -11,6 +11,9 @@ K's lifeにseleniumでアクセスして、自動出席登録もしくはアン�
 パッケージインストール ```pip install パッケージ名```  
 requirements.txtへパッケージ一覧を出力する ```pip freeze > requirements.txt```  
 requirements.txtから一括でパッケージをインストールする ```pip install -r requirements.txt```  
+パッケージをすべて削除する（基本的に個々で削除すること）  
+```pip freeze > removepackage.txt```  
+```pip uninstall -r removepackage.txt```  
   
 seleniumのインストールとリファレンス  
 https://nekoy3.net/2022/09/12/selenium-python/  
