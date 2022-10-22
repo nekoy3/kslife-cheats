@@ -16,6 +16,11 @@ def create_config():
     config.set('login', '# K\'s lifeのパスワードを入力(xxxにすることでコンソール上から入力することが出来ます。）')
     config.set('login', 'password', 'xxx')
 
+    config.add_section('discord')
+    config.set('discord', '# discord->ユーザ設定->マイアカウント->自分の名前の横にある「・・・」をクリック')
+    config.set('discord', '# IDをコピーすることで、ユーザIDを取得できるのでそれを設定')
+    config.set('discord', 'user_id', 0)
+
     with open('config.ini', 'w') as configfile:
         config.write(configfile)
 
