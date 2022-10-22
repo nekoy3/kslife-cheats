@@ -3,7 +3,8 @@ import discord
 from discord import app_commands
 
 class MyClient(discord.Client):
-    def __init__(self, *, intents: discord.Intents):
+    def __init__(self):
+        intents = discord.Intents.all()
         super().__init__(intents=intents)
         self.tree = app_commands.CommandTree(self) #全てのコマンドを管理するCommandTree型オブジェクトを生成
 
