@@ -53,14 +53,15 @@ def main():
     #ログイン画面をアクティブウィンドウにする
     chrome.switch_to.window(chrome.window_handles[-1])
     
+    #ログイン画面で値を入力する
     try:
         chrome.find_element(By.ID, "userNameInput").send_keys(configs['login']['mail'])
         chrome.find_element(By.ID, "passwordInput").send_keys(configs['login']['password'])
         chrome.find_element(By.ID, "submitButton").click()
     except: 
         sent_message("ログイン画面に到達できませんでした。再度お試しください。")
-        
-
+    
+    #サインインボタンを押した後ホーム画面に遷移するまでの処理
     try:
         chrome.find_element(By.ID, "errorText")
     except: #find_elementに失敗したら正常
@@ -74,7 +75,13 @@ def main():
     else:
         sent_message("ログインに失敗しました。IDかパスワードを間違えている可能性があります。config.iniを確認して再度お試しください。")
         exit()
+
+    #ホーム画面からの処理
+    #出席登録画面に遷移
+    chrome.find_element(By.ID, "btnAttendance").click()
+
     
+    chrome.find_element(By.NAME, "授業ｱﾝｹｰﾄ").click()
 
     time.sleep(3)
 
