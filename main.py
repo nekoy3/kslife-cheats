@@ -4,6 +4,7 @@ from getpass import getpass
 import traceback
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome import service as fs
+from selenium.webdriver.common.action_chains import ActionChains
 import time
 
 from cfg_rw import ConfigClass
@@ -80,8 +81,14 @@ def main():
     #出席登録画面に遷移
     chrome.find_element(By.ID, "btnAttendance").click()
 
-    
-    chrome.find_element(By.NAME, "授業ｱﾝｹｰﾄ").click()
+    #メニューバーにカーソルを当てる
+    actions = ActionChains(chrome)
+    actions.move_to_element(
+        chrome.find_element(By.CLASS_NAME, "d_menu")
+    ).perform()
+
+    #授業アンケートを開く
+    chrome.find_element(By.XPATH, "//*[@id=\"header-menu-sub\"]/li/table/tbody/tr[2]/td[1]/a[6]").click()
 
     time.sleep(3)
 
