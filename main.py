@@ -2,10 +2,28 @@
 from selenium import webdriver
 from getpass import getpass
 from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome import service as fs
 import time
 
 from cfg_rw import ConfigClass
 import bot
+
+#ドライバーを準備するメソッド
+def make_driver_process():
+        #ChromeOptionsクラスのインスタンスを生成して、それにオプションを追加する
+        options = webdriver.ChromeOptions()
+        
+        #ヘッドレスモードで起動する（バックグラウンドで実行するようになる）
+        #options.add_argument("--headless")
+        
+        #ドライバのパスを指定
+        chrome_service = fs.Service(executable_path='./driver/chromedriver.exe')
+
+        #ドライバのパスとオプションを設定してChromeのインスタンスを生成
+        chrome = webdriver.Chrome(service=chrome_service, options=options)
+
+        #タイムアウトを五秒で設定、読み込み終わるまで待機する
+        chrome.implicitly_wait(5) 
 
 def main():
     configs = ConfigClass().read_config()
@@ -14,7 +32,7 @@ def main():
         configs['login']['password'] = getpass('パスワードを入力・・・: ')
 
     #webdriver読み込み
-    chrome = webdriver.Chrome(executable_path='./driver/chromedriver.exe')
+    chrome = make_driver_process()
 
     #K's lifeログイン前画面に移動
     chrome.get("https://ksuweb.kyusan-u.ac.jp/portalv2/")
