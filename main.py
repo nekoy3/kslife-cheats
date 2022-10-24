@@ -2,15 +2,15 @@
 from selenium import webdriver
 from getpass import getpass
 
-import cfg_rw
+from cfg_rw import ConfigClass
 import bot
 
-configs = cfg_rw.main()
+configs = ConfigClass().read_config()
 #長時間稼働するプログラムなので一度使用したらメモリからも削除する
-if configs['login']['pass'] == 'xxx':
+if configs['login']['pass'] == 'terminal':
     configs['login']['pass'] = getpass('パスワードを入力・・・: ')
 
-client = bot.MyClient()
+#client = bot.MyClient()
 
-chrome = webdriver.Chrome(executable_path='./driver/chromedriver.exe')
-chrome.get("https://www.nttdocomo.co.jp/mydocomo/")
+#chrome = webdriver.Chrome(executable_path='./driver/chromedriver.exe')
+#chrome.get("https://www.nttdocomo.co.jp/mydocomo/")
