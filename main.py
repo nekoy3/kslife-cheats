@@ -1,6 +1,7 @@
 # coding: utf-8
 from selenium import webdriver
 from getpass import getpass
+import traceback
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome import service as fs
 import time
@@ -27,6 +28,10 @@ def make_driver_process() -> webdriver.Chrome:
 
         return chrome
 
+def sent_message(msg):
+    #bot稼働時に代わりにdiscordで送信するように実装する
+    print(msg)
+
 def main():
     configs = ConfigClass().read_config()
     #長時間稼働するプログラムなので一度使用したらメモリからも削除する
@@ -47,10 +52,23 @@ def main():
 
     #ログイン画面をアクティブウィンドウにする
     chrome.switch_to.window(chrome.window_handles[-1])
-
+    
     chrome.find_element(By.ID, "userNameInput").send_keys(configs['login']['mail'])
     chrome.find_element(By.ID, "passwordInput").send_keys(configs['login']['password'])
     chrome.find_element(By.ID, "submitButton").click()
+
+    try:
+        chrome.find_element(By.ID, "errorText")
+    except: #find_elementに失敗したら正常
+        try: #K's life画面のid=homeがあれば正常遷移
+            chrome.find_element(By.ID, "home")
+        except:
+            sent_message("ログイン成功後、ホーム画面にたどり着けませんでした。メンテナンス等の原因が考えられるため、手動で確認してください。\n" + traceback.format_exc())
+        else:
+            sent_message("正常にホーム画面に遷移しました。")
+    else:
+        exit()
+    
 
     time.sleep(3)
 
