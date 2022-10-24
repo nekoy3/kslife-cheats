@@ -1,6 +1,7 @@
 # coding: utf-8
 #https://github.com/nekoy3/raspi-nfc-botより
 import configparser
+import traceback
 import os
 
 class ConfigClass():
@@ -26,18 +27,18 @@ class ConfigClass():
 
     def read_config(self):
         try:
-            read_cfg = self.cfg.read('config.ini')
+            self.cfg.read('config.ini')
 
-            self.mail = read_cfg['login']['mail']
-            self.password = read_cfg['login']['password']
-            self.token = read_cfg['discord']['token']
-            self.user_id = int(read_cfg['discord']['user_id'])
+            self.mail = self.cfg['login']['mail']
+            self.password = self.cfg['login']['password']
+            self.token = self.cfg['discord']['token']
+            self.user_id = int(self.cfg['discord']['user_id'])
         
             if self.mail == 'xxx@st.kyusan-u.ac.jp' or self.password == 'xxx' or self.token == 'xxx' or self.user_id == 0:
                 raise ValueError("いずれかの値が初期値になっているので修正してください。")
                 
         except Exception as e:
-            print("config.iniが存在しないか、設定が間違っています。\n" + str(e))
+            print("config.iniが存在しないか、設定が間違っています。\n" + traceback.format_exc())
             #ファイルの存在確認(カレントディレクトリにconfig.iniがあるか)
             if not os.path.isfile('config.ini'):
                 self.create_config()
