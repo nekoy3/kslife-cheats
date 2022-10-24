@@ -7,8 +7,8 @@ import bot
 
 configs = ConfigClass().read_config()
 #長時間稼働するプログラムなので一度使用したらメモリからも削除する
-if configs['login']['pass'] == 'terminal':
-    configs['login']['pass'] = getpass('パスワードを入力・・・: ')
+if configs['login']['password'] == 'terminal':
+    configs['login']['password'] = getpass('パスワードを入力・・・: ')
 
 #client = bot.MyClient()
 
