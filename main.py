@@ -53,9 +53,13 @@ def main():
     #ログイン画面をアクティブウィンドウにする
     chrome.switch_to.window(chrome.window_handles[-1])
     
-    chrome.find_element(By.ID, "userNameInput").send_keys(configs['login']['mail'])
-    chrome.find_element(By.ID, "passwordInput").send_keys(configs['login']['password'])
-    chrome.find_element(By.ID, "submitButton").click()
+    try:
+        chrome.find_element(By.ID, "userNameInput").send_keys(configs['login']['mail'])
+        chrome.find_element(By.ID, "passwordInput").send_keys(configs['login']['password'])
+        chrome.find_element(By.ID, "submitButton").click()
+    except: 
+        sent_message("ログイン画面に到達できませんでした。再度お試しください。")
+        
 
     try:
         chrome.find_element(By.ID, "errorText")
@@ -64,9 +68,11 @@ def main():
             chrome.find_element(By.ID, "home")
         except:
             sent_message("ログイン成功後、ホーム画面にたどり着けませんでした。メンテナンス等の原因が考えられるため、手動で確認してください。\n" + traceback.format_exc())
+            exit()
         else:
             sent_message("正常にホーム画面に遷移しました。")
     else:
+        sent_message("ログインに失敗しました。IDかパスワードを間違えている可能性があります。config.iniを確認して再度お試しください。")
         exit()
     
 
