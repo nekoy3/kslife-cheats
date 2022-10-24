@@ -9,7 +9,7 @@ from cfg_rw import ConfigClass
 import bot
 
 #ドライバーを準備するメソッド
-def make_driver_process():
+def make_driver_process() -> webdriver.Chrome:
         #ChromeOptionsクラスのインスタンスを生成して、それにオプションを追加する
         options = webdriver.ChromeOptions()
         
@@ -24,6 +24,8 @@ def make_driver_process():
 
         #タイムアウトを五秒で設定、読み込み終わるまで待機する
         chrome.implicitly_wait(5) 
+
+        return chrome
 
 def main():
     configs = ConfigClass().read_config()
@@ -48,7 +50,7 @@ def main():
 
     chrome.find_element(By.ID, "userNameInput").send_keys(configs['login']['mail'])
     chrome.find_element(By.ID, "passwordInput").send_keys(configs['login']['password'])
-    chrome.find_element(By.LINK_TEXT, "サインイン").click()
+    chrome.find_element(By.ID, "submitButton").click()
 
     time.sleep(3)
 
