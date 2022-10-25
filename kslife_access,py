@@ -1,5 +1,4 @@
 from selenium import webdriver
-from getpass import getpass
 import traceback
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome import service as fs
@@ -34,12 +33,7 @@ def sent_message(msg):
     #bot稼働時に代わりにdiscordで送信するように実装する
     print(msg)
 
-def main():
-    configs = ConfigClass().read_config()
-    #長時間稼働するプログラムなので一度使用したらメモリからも削除する
-    if configs['login']['password'] == 'terminal':
-        configs['login']['password'] = getpass('パスワードを入力・・・: ')
-
+def kslife_access(conigs):
     #webdriver読み込み
     chrome = make_driver_process()
 
@@ -59,6 +53,8 @@ def main():
         chrome.find_element(By.ID, "submitButton").click()
     except: 
         sent_message("ログイン画面に到達できませんでした。再度お試しください。")
+    
+    configs['login']['password'] = None 
     
     #サインインボタンを押した後ホーム画面に遷移するまでの処理
     try:
