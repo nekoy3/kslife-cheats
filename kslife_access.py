@@ -77,17 +77,19 @@ class BrowserClass:
         self.chrome.close()
         self.chrome.switch_to.window(self.chrome.window_handles[-1])
 
-        #ホーム画面からの処理
+    #出席登録ボタンの意
+    def attendance_registration(self):
         #出席登録画面に遷移
         self.chrome.find_element(By.ID, "btnAttendance").click()
-
+    
+    #授業アンケートの意
+    def class_worksheet(self):
         #メニューバーにカーソルを当てる
-        #actions = ActionChains(chrome)
-        #actions.move_to_element(
-        #    chrome.find_element(By.CLASS_NAME, "d_menu")
-        #).perform()
+        actions = ActionChains(self.chrome)
+        actions.move_to_element(
+            self.chrome.find_element(By.CLASS_NAME, "d_menu")
+        ).perform()
 
         #授業アンケートを開く
-        #chrome.find_element(By.XPATH, "//*[@id=\"header-menu-sub\"]/li/table/tbody/tr[2]/td[1]/a[6]").click()
+        self.chrome.find_element(By.XPATH, "//*[@id=\"header-menu-sub\"]/li/table/tbody/tr[2]/td[1]/a[6]").click()
 
-        time.sleep(3)
