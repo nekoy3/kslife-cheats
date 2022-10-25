@@ -5,6 +5,8 @@ import traceback
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome import service as fs
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 import time
 
 from cfg_rw import ConfigClass
@@ -48,12 +50,9 @@ def main():
     #ログイン画面へのボタンをクリック(XPath)
     chrome.find_element(By.XPATH, '//*[@id="left_container"]/div/ul[1]/li/a').click()
 
-    #アクティブになっているログイン前画面を閉じる
-    chrome.close()
-
     #ログイン画面をアクティブウィンドウにする
     chrome.switch_to.window(chrome.window_handles[-1])
-    
+
     #ログイン画面で値を入力する
     try:
         chrome.find_element(By.ID, "userNameInput").send_keys(configs['login']['mail'])
@@ -76,19 +75,24 @@ def main():
     else:
         sent_message("ログインに失敗しました。IDかパスワードを間違えている可能性があります。config.iniを確認して再度お試しください。")
         exit()
+    
+    #ログイン前画面を閉じる
+    chrome.switch_to.window(chrome.window_handles[0])
+    chrome.close()
+    chrome.switch_to.window(chrome.window_handles[-1])
 
     #ホーム画面からの処理
     #出席登録画面に遷移
     chrome.find_element(By.ID, "btnAttendance").click()
 
     #メニューバーにカーソルを当てる
-    actions = ActionChains(chrome)
-    actions.move_to_element(
-        chrome.find_element(By.CLASS_NAME, "d_menu")
-    ).perform()
+    #actions = ActionChains(chrome)
+    #actions.move_to_element(
+    #    chrome.find_element(By.CLASS_NAME, "d_menu")
+    #).perform()
 
     #授業アンケートを開く
-    chrome.find_element(By.XPATH, "//*[@id=\"header-menu-sub\"]/li/table/tbody/tr[2]/td[1]/a[6]").click()
+    #chrome.find_element(By.XPATH, "//*[@id=\"header-menu-sub\"]/li/table/tbody/tr[2]/td[1]/a[6]").click()
 
     time.sleep(3)
 
