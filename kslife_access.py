@@ -93,3 +93,6 @@ class BrowserClass:
         #授業アンケートを開く
         self.chrome.find_element(By.XPATH, "//*[@id=\"header-menu-sub\"]/li/table/tbody/tr[2]/td[1]/a[6]").click()
 
+    #ホーム画面に戻る
+    def back_homemenu(self):
+        self.chrome.find_element(By.XPATH, "//*[@id=\"header-navi\"]/h1/a").click()
