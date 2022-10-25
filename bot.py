@@ -13,3 +13,11 @@ class MyClient(discord.Client):
     async def setup_hook(self):
         self.channel = self.create_dm(self.get_user(self.user_id))
         self.channel.send(content="起動しました。")
+    
+    #メッセージ送信で処理するメソッド、基本的にここで処理をする
+    async def on_message(self, msg):
+        if msg.content.startswith('!'):
+            if msg.content.startswith('!help'):
+                self.channel.send(content="helpを参照します。")
+        else:
+            return
