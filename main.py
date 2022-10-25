@@ -3,6 +3,7 @@ from getpass import getpass
 
 from bot import MyClient
 from cfg_rw import ConfigClass
+from kslife_access import BrowserClass
 
 configs = ConfigClass().read_config()
 if configs['login']['password'] == 'terminal':
