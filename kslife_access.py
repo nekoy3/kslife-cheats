@@ -11,6 +11,10 @@ from cfg_rw import ConfigClass
 import bot
 
 class BrowserClass:
+    def __init__(self, mail, password):
+        self.mail = mail
+        self.password = password
+    
     #ドライバーを準備するメソッド
     def make_driver_process(self) -> webdriver.Chrome:
         #ChromeOptionsクラスのインスタンスを生成して、それにオプションを追加する
@@ -34,7 +38,7 @@ class BrowserClass:
         #bot稼働時に代わりにdiscordで送信するように実装する
         print(msg)
 
-    def kslife_access(self, configs):
+    def kslife_access(self):
         #webdriver読み込み
         self.chrome = self.make_driver_process()
 
@@ -49,13 +53,14 @@ class BrowserClass:
 
         #ログイン画面で値を入力する
         try:
-            self.chrome.find_element(By.ID, "userNameInput").send_keys(configs['login']['mail'])
-            self.chrome.find_element(By.ID, "passwordInput").send_keys(configs['login']['password'])
+            self.chrome.find_element(By.ID, "userNameInput").send_keys(self.mail)
+            self.chrome.find_element(By.ID, "passwordInput").send_keys(self.password)
             self.chrome.find_element(By.ID, "submitButton").click()
         except: 
-            self.sent_message("ログイン画面に到達できませんでした。再度お試しください。")
+            self.sent_message("ログイン画面に到達できませんでした。時間を空けて再度お試しください。")
+            raise Exception("ログイン画面到達不可")
     
-        configs['login']['password'] = None 
+        self.password = None 
     
         #サインインボタンを押した後ホーム画面に遷移するまでの処理
         try:
@@ -65,12 +70,12 @@ class BrowserClass:
                 self.chrome.find_element(By.ID, "home")
             except:
                 self.sent_message("ログイン成功後、ホーム画面にたどり着けませんでした。メンテナンス等の原因が考えられるため、手動で確認してください。\n" + traceback.format_exc())
-                exit()
+                raise Exception("ホーム画面到達不可")
             else:
                 self.sent_message("正常にホーム画面に遷移しました。")
         else:
             self.sent_message("ログインに失敗しました。IDかパスワードを間違えている可能性があります。config.iniを確認して再度お試しください。")
-            exit()
+            raise Exception("ログイン失敗")
     
         #ログイン前画面を閉じる
         self.chrome.switch_to.window(self.chrome.window_handles[0])
@@ -96,3 +101,13 @@ class BrowserClass:
     #ホーム画面に戻る
     def back_homemenu(self):
         self.chrome.find_element(By.XPATH, "//*[@id=\"header-navi\"]/h1/a").click()
+
+    #アクセスできるかを確認する
+    async def testing_access(self):
+        try:
+            self.kslife_access()
+        except Exception as e:
+            error_msg = e + "\nテストアクセスに失敗したためbotを停止しました。"
+            await self.channel.send(content=error_msg)
+            exit()
+            
