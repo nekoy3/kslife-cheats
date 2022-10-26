@@ -13,9 +13,10 @@ class MyClient(discord.Client):
     #ボットをセットアップするdiscord.Clientが持つ空のメソッド、オーバーライドすることでログイン時にon_ready()より精密に実行する
     async def setup_hook(self):
         self.channel = await self.create_dm(await self.fetch_user(self.user_id))
+        self.kslife.set_channel(self.channel)
         await self.channel.send(content="kslifeアクセスチェック中・・・")
         #kslifeアクセスを試みる(失敗したらexitする)
-        await self.kslife.testing_access(self.channel)
+        await self.kslife.testing_access()
         await self.channel.send(content="botを起動しました。")
     
     #helpコマンドでヘルプを参照するためのメソッド
