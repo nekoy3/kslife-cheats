@@ -3,16 +3,20 @@ import discord
 from discord import app_commands
 
 class MyClient(discord.Client):
-    def __init__(self, user_id):
+    def __init__(self, user_id, kslife):
         intents = discord.Intents.all()
         super().__init__(intents=intents)
         self.tree = app_commands.CommandTree(self) #全てのコマンドを管理するCommandTree型オブジェクトを生成
         self.user_id = user_id
+        self.kslife = kslife
 
     #ボットをセットアップするdiscord.Clientが持つ空のメソッド、オーバーライドすることでログイン時にon_ready()より精密に実行する
     async def setup_hook(self):
         self.channel = await self.create_dm(await self.fetch_user(self.user_id))
         await self.channel.send(content="起動しました。")
+
+        #kslifeアクセスを試みる
+        await self.kslife.testing_access()
 
     def help_embed(self) -> discord.Embed:
         embed = discord.Embed(title="Embedのタイトル",description="Embedの概要")
