@@ -15,9 +15,10 @@ class MyClient(discord.Client):
         self.channel = await self.create_dm(await self.fetch_user(self.user_id))
         await self.channel.send(content="起動しました。")
 
-        #kslifeアクセスを試みる
+        #kslifeアクセスを試みる(失敗したらexitする)
         await self.kslife.testing_access()
-
+    
+    #helpコマンドでヘルプを参照するためのメソッド
     def help_embed(self) -> discord.Embed:
         embed = discord.Embed(title="Embedのタイトル",description="Embedの概要")
         return embed
@@ -28,7 +29,7 @@ class MyClient(discord.Client):
             if msg.content.startswith('!help'):
                 await self.channel.send(content="helpを参照します。", embed=self.help_embed())
             
-            if msg.content.startswith('!stop'):
+            elif msg.content.startswith('!stop'):
                 await self.channel.send(content="See you next again")
                 await self.close()
 
