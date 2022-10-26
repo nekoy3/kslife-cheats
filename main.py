@@ -9,8 +9,8 @@ configs = ConfigClass().read_config()
 if configs['login']['password'] == 'terminal':
     configs['login']['password'] = getpass('パスワードを入力・・・: ')
 
-#kslife = BrowserClass()
-#kslife.kslife_access(configs)
+kslife = BrowserClass(configs['login']['mail'], configs['login']['password'])
+configs['login']['password'] = None
 
-client = MyClient(configs['discord']['user_id'])
+client = MyClient(configs['discord']['user_id'], kslife)
 client.run(configs['discord']['token'])
