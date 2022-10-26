@@ -3,12 +3,7 @@ import traceback
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome import service as fs
 from selenium.webdriver.common.action_chains import ActionChains
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import WebDriverWait
-import time
-
-from cfg_rw import ConfigClass
-import bot
+from selenium.webdriver.common.alert import Alert
 
 class BrowserClass:
     def __init__(self, mail, password):
@@ -33,11 +28,16 @@ class BrowserClass:
         chrome.implicitly_wait(5) 
 
         return chrome
+    
+    #全てのウィンドウを閉じてドライバを終了する
+    def exit_chrome(self):
+        self.chrome.quit()
 
     def sent_message(self, msg):
         #bot稼働時に代わりにdiscordで送信するように実装する
         print(msg)
 
+    #ログイン処理等をこなしてトップ画面まで遷移する
     def kslife_access(self):
         #webdriver読み込み
         self.chrome = self.make_driver_process()
@@ -101,13 +101,22 @@ class BrowserClass:
     #ホーム画面に戻る
     def back_homemenu(self):
         self.chrome.find_element(By.XPATH, "//*[@id=\"header-navi\"]/h1/a").click()
+    
+    #ログアウトボタンを押してウィンドウを閉じる
+    def logout_kslife_and_close_window(self):
+        self.chrome.find_element(By.XPATH, "//*[@id=\"header-navi\"]/p/a[2]").click()
+        #ダイアログが表示されるのでOKボタンを押す
+        Alert(self.chrome).accept()
+        self.chrome.close()
 
     #アクセスできるかを確認する
-    async def testing_access(self):
+    async def testing_access(self, channel):
         try:
             self.kslife_access()
         except Exception as e:
-            error_msg = e + "\nテストアクセスに失敗したためbotを停止しました。"
-            await self.channel.send(content=error_msg)
+            error_msg = str(e) + "\nテストアクセスに失敗したためbotを停止しました。"
+            await channel.send(content=error_msg)
+            self.exit_chrome()
             exit()
-            
+        else:
+            self.logout_kslife_and_close_window()
