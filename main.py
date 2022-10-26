@@ -9,6 +9,7 @@ configs = ConfigClass().read_config()
 if configs['login']['password'] == 'terminal':
     configs['login']['password'] = getpass('パスワードを入力・・・: ')
 
+#kslifeインスタンスは基本的にBotが所持する
 kslife = BrowserClass(configs['login']['mail'], configs['login']['password'])
 configs['login']['password'] = None
 
