@@ -29,17 +29,21 @@ class BrowserClass:
 
         return chrome
     
+    #bot.pyの初期設定でチャンネルをフィールドとして保持するようにする
+    def set_channel(self, channel):
+        self.channel = channel
+    
     #全てのウィンドウを閉じてドライバを終了する
     def exit_chrome(self):
         self.chrome.quit()
 
-    def sent_message(self, msg):
+    async def sent_message(self, msg):
         #bot稼働時に代わりにdiscordで送信するように実装する
-        print(msg)
+        await self.channel.send(content=msg)
 
     #ログイン処理等をこなしてトップ画面まで遷移する
-    def kslife_access(self):
-        #webdriver読み込み
+    async def kslife_access(self):
+        #webdriver読み込んでドライバをフィールドにセットする
         self.chrome = self.make_driver_process()
 
         #K's lifeログイン前画面に移動
@@ -57,7 +61,7 @@ class BrowserClass:
             self.chrome.find_element(By.ID, "passwordInput").send_keys(self.password)
             self.chrome.find_element(By.ID, "submitButton").click()
         except: 
-            self.sent_message("ログイン画面に到達できませんでした。時間を空けて再度お試しください。")
+            await self.sent_message("ログイン画面に到達できませんでした。時間を空けて再度お試しください。")
             raise Exception("ログイン画面到達不可")
     
         self.password = None 
@@ -69,12 +73,12 @@ class BrowserClass:
             try: #K's life画面のid=homeがあれば正常遷移
                 self.chrome.find_element(By.ID, "home")
             except:
-                self.sent_message("ログイン成功後、ホーム画面にたどり着けませんでした。メンテナンス等の原因が考えられるため、手動で確認してください。\n" + traceback.format_exc())
+                await self.sent_message("ログイン成功後、ホーム画面にたどり着けませんでした。メンテナンス等の原因が考えられるため、手動で確認してください。\n" + traceback.format_exc())
                 raise Exception("ホーム画面到達不可")
             else:
-                self.sent_message("正常にホーム画面に遷移しました。")
+                await self.sent_message("正常にホーム画面に遷移しました。")
         else:
-            self.sent_message("ログインに失敗しました。IDかパスワードを間違えている可能性があります。config.iniを確認して再度お試しください。")
+            await self.sent_message("ログインに失敗しました。IDかパスワードを間違えている可能性があります。config.iniを確認して再度お試しください。")
             raise Exception("ログイン失敗")
     
         #ログイン前画面を閉じる
@@ -103,20 +107,21 @@ class BrowserClass:
         self.chrome.find_element(By.XPATH, "//*[@id=\"header-navi\"]/h1/a").click()
     
     #ログアウトボタンを押してウィンドウを閉じる
-    def logout_kslife_and_close_window(self):
+    async def logout_kslife_and_close_window(self):
+        await self.sent_message("please wait...")
         self.chrome.find_element(By.XPATH, "//*[@id=\"header-navi\"]/p/a[2]").click()
         #ダイアログが表示されるのでOKボタンを押す
         Alert(self.chrome).accept()
         self.chrome.close()
 
     #アクセスできるかを確認する
-    async def testing_access(self, channel):
+    async def testing_access(self):
         try:
-            self.kslife_access()
+            await self.kslife_access()
         except Exception as e:
             error_msg = str(e) + "\nテストアクセスに失敗したためbotを停止しました。"
-            await channel.send(content=error_msg)
+            await self.sent_message(error_msg)
             self.exit_chrome()
             exit()
         else:
-            self.logout_kslife_and_close_window()
+            await self.logout_kslife_and_close_window()
