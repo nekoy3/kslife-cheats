@@ -21,7 +21,15 @@ class MyClient(discord.Client):
     
     #helpコマンドでヘルプを参照するためのメソッド
     def help_embed(self) -> discord.Embed:
-        embed = discord.Embed(title="Embedのタイトル",description="Embedの概要")
+        embed = discord.Embed(
+            title="kslife攻略コマンド",
+            description="コマンド一覧を参照します。",
+            color=0x00ff00,
+            url="https://github.com/nekoy3/kslife-cheats"
+        )
+        embed.add_field(name="!help", value="このヘルプを表示します。")
+        embed.add_field(name="!stop", value="botを停止します。")
+        embed.set_footer(text="made by nekoy3")
         return embed
     
     #メッセージ送信で処理するメソッド、基本的にここで処理をする
