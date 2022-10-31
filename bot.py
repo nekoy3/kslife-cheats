@@ -34,7 +34,7 @@ class MyClient(discord.Client):
 
     #コマンドラインを受け取って取得する個数を取得する
     def get_count(self, args) -> int:
-        if len(args) > 2:
+        if len(args) > 2: #引数が3個ある(コマンド本体含めて)
             try:
                 if 1 <= int(args[2]) <= 30:
                     return int(args[2])
@@ -68,16 +68,26 @@ class MyClient(discord.Client):
                     await self.channel.send(content=ermsg)
                     return
                 
-                #引数の値個の情報を取得する->c個
+                #引数の値個の情報を取得する->c個 デフォルト10個
                 c = self.get_count(msg_args)
-                
+
+                #授業連絡を表示する引数が指定されたとき
                 if msg_args[1] == "ml":
                     pass
+
+                #授業アンケートを表示する引数が指定されたとき
                 elif msg_args[1] == "ak":
                     pass
+
+                #引数が想定していないものの場合
                 else:
                     await self.channel.send(content=ermsg)
                     return
+            
+            #テスト用でページを開く処理(実用段階では処理を削除する)
+            elif msg.content.startswith('!debug'):
+                await self.kslife.kslife_access()
+                await self.channel.send("Done!")
 
             else:
                 await self.channel.send(content="コマンドが異なります。\"!help\"で参照してください。")
