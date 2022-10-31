@@ -66,6 +66,7 @@ class MyClient(discord.Client):
                     msg_args[1]
                 except IndexError:
                     await self.channel.send(content=ermsg)
+                    return
                 
                 #引数の値個の情報を取得する->c個
                 c = self.get_count(msg_args)
