@@ -1,5 +1,6 @@
 from selenium import webdriver
 import traceback
+import time
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome import service as fs
 from selenium.webdriver.common.action_chains import ActionChains
@@ -24,8 +25,8 @@ class BrowserClass:
         #ドライバのパスとオプションを設定してChromeのインスタンスを生成
         chrome = webdriver.Chrome(service=chrome_service, options=options)
 
-        #タイムアウトを五秒で設定、読み込み終わるまで待機する
-        chrome.implicitly_wait(5) 
+        #タイムアウトを10秒で設定、読み込み終わるまで待機する
+        chrome.implicitly_wait(10) 
 
         return chrome
     
@@ -54,7 +55,7 @@ class BrowserClass:
 
         #ログイン画面をアクティブウィンドウにする
         self.chrome.switch_to.window(self.chrome.window_handles[-1])
-
+        
         #ログイン画面で値を入力する
         try:
             self.chrome.find_element(By.ID, "userNameInput").send_keys(self.mail)
@@ -92,7 +93,7 @@ class BrowserClass:
         self.chrome.find_element(By.ID, "btnAttendance").click()
     
     #授業アンケートの意
-    def class_worksheet(self):
+    def get_class_worksheet(self):
         #メニューバーにカーソルを当てる
         actions = ActionChains(self.chrome)
         actions.move_to_element(
@@ -101,6 +102,17 @@ class BrowserClass:
 
         #授業アンケートを開く
         self.chrome.find_element(By.XPATH, "//*[@id=\"header-menu-sub\"]/li/table/tbody/tr[2]/td[1]/a[6]").click()
+    
+    #学内連絡を表示
+    def get_school_contact(self):
+        #メニューバーにカーソルを当てる
+        actions = ActionChains(self.chrome)
+        actions.move_to_element(
+            self.chrome.find_element(By.CLASS_NAME, "d_menu")
+        ).perform()
+
+        #学内連絡を開く
+        
 
     #ホーム画面に戻る
     def back_homemenu(self):
