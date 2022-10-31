@@ -65,8 +65,6 @@ class BrowserClass:
             await self.sent_message("ログイン画面に到達できませんでした。時間を空けて再度お試しください。")
             raise Exception("ログイン画面到達不可")
     
-        self.password = None 
-    
         #サインインボタンを押した後ホーム画面に遷移するまでの処理
         try:
             self.chrome.find_element(By.ID, "errorText")
@@ -103,7 +101,7 @@ class BrowserClass:
         #授業アンケートを開く
         self.chrome.find_element(By.XPATH, "//*[@id=\"header-menu-sub\"]/li/table/tbody/tr[2]/td[1]/a[6]").click()
     
-    #学内連絡を表示
+    #学内連絡を取得
     def get_school_contact(self):
         #メニューバーにカーソルを当てる
         actions = ActionChains(self.chrome)
@@ -111,8 +109,17 @@ class BrowserClass:
             self.chrome.find_element(By.CLASS_NAME, "d_menu")
         ).perform()
 
-        #学内連絡を開く
-        
+        #学内連絡を開く//*[@id="header-menu-sub"]/li/table/tbody/tr[2]/td[2]/a[2]
+        self.chrome.find_element(By.XPATH, "//*[@id=\"header-menu-sub\"]/li/table/tbody/tr[2]/td[2]/a[2]").click()
+    
+    #授業連絡を取得
+    def get_class_contact(self):
+        actions = ActionChains(self.chrome)
+        actions.move_to_element(
+            self.chrome.find_element(By.CLASS_NAME, "d_menu")
+        ).perform()
+
+        self.chrome.find_element(By.XPATH, "//*[@id=\"header-menu-sub\"]/li/table/tbody/tr[2]/td[1]/a[2]").click()
 
     #ホーム画面に戻る
     def back_homemenu(self):
