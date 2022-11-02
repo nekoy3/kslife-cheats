@@ -73,7 +73,8 @@ class MyClient(discord.Client):
 
                 #授業連絡を表示する引数が指定されたとき
                 if msg_args[1] == "ml":
-                    pass
+                    contact_tag_list = self.kslife.get_class_contact()
+                    await self.channel.send(content=str(contact_tag_list))
 
                 #授業アンケートを表示する引数が指定されたとき
                 elif msg_args[1] == "ak":
@@ -86,6 +87,7 @@ class MyClient(discord.Client):
             
             #テスト用でページを開く処理(実用段階では処理を削除する)
             elif msg.content.startswith('!debug'):
+                await self.channel.send("Doneが表示されるまで待機・・・")
                 await self.kslife.kslife_access()
                 await self.channel.send("Done!")
 

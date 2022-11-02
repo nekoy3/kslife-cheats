@@ -112,7 +112,7 @@ class BrowserClass:
         #学内連絡を開く//*[@id="header-menu-sub"]/li/table/tbody/tr[2]/td[2]/a[2]
         self.chrome.find_element(By.XPATH, "//*[@id=\"header-menu-sub\"]/li/table/tbody/tr[2]/td[2]/a[2]").click()
     
-    #授業連絡を取得
+    #授業連絡を取得(ページ遷移はしない)
     def get_class_contact(self):
         actions = ActionChains(self.chrome)
         actions.move_to_element(
@@ -120,6 +120,8 @@ class BrowserClass:
         ).perform()
 
         self.chrome.find_element(By.XPATH, "//*[@id=\"header-menu-sub\"]/li/table/tbody/tr[2]/td[1]/a[2]").click()
+        contact_tag_list = self.chrome.find_elements(By.TAG, "tbody")
+        return contact_tag_list
 
     #ホーム画面に戻る
     def back_homemenu(self):
